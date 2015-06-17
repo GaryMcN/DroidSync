@@ -1,0 +1,28 @@
+﻿<form>
+    <label class="item item-input item-stacked-label">
+        <span class="input-label">ID</span>
+        <input type="text" name="ID" placeholder="ID" ng-model="contact.id" />
+    </label>
+    <label class="item item-input item-stacked-label">
+        <span class="input-label">First Name</span>
+        <input type="text" name="firstName" placeholder="First Name" ng-model="contact.firstName" />
+    </label>
+    <label class="item item-input item-stacked-label">
+        <span class="input-label">Last Name</span>
+        <input type="text" name="lastName" placeholder="Last Name" ng-model="contact.lastName" />
+    </label>
+    <label class="item item-input item-stacked-label">
+        <span class="input-label">Mobile</span>
+        <input type="text" name="mobileNo" placeholder="Mobile Number" ng-model="contact.mobileNo" />
+    </label>
+    <label class="item item-input item-stacked-label">
+        <span class="input-label">Home</span>
+        <input type="text" name="homeNo" placeholder="Home Number" ng-model="contact.homeNo" />
+    </label>
+    <label class="item item-input item-stacked-label">
+        <span class="input-label">Email</span>
+        <input type="email" name="email" placeholder="user@email.com" ng-model="contact.email" />
+    </label>
+    <input class="button button-block button-balanced" type="submit" ng-click="editContact()" value="Choose Contact" />
+    <input class="button button-block button-balanced" type="submit" ng-click="saveContact(contact)" value="Save Contact" />
+</form>

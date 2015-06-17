@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html ng-app="droidSync">
+<head>
+    <meta charset="utf-8" />
+    <title>DroidSync</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+
+
+    <script src="scripts/ionic.bundle.js"></script>
+    <script src="scripts/angular-route.js"></script>
+
+    <!-- DroidSync references -->
+    <link href="css/index.css" rel="stylesheet" />
+    <link href="css/ionicons.css" rel="stylesheet" />
+    <link href="Content/ionic.css" rel="stylesheet">
+</head>
+<body ng-controller="mainController">
+    <ion-header-bar align-title="center" class="bar-dark">
+        <button class="button button-clear icon ion-navicon"></button>
+        <h1 class="title">DroidSync</h1>
+    </ion-header-bar>
+
+    <ion-content padding="true" has-bouncing="true" class="has-header has-footer">
+        <div id="main" ng-view>
+            <!--Template Content Injected Here-->
+        </div>
+    </ion-content>
+        
+
+    <div class="tabs tabs-icon-top">
+        <a class="tab-item" href="#managermenu">
+            <i class="icon ion-person-stalker"></i>
+            Manager
+        </a>
+        <a class="tab-item" href="#/">
+            <i class="icon ion-loop"></i>
+            Sync
+        </a>
+        <a class="tab-item" href="#settings">
+            <i class="icon ion-android-settings"></i>
+            Settings
+        </a>
+    </div>
+
+
+    <!-- Cordova reference, this is added to your app when it's built. -->
+    <script src="app/scripts.js"></script>
+    <script src="cordova.js"></script>
+    <script src="scripts/platformOverrides.js"></script>
+    <script src="scripts/index.js"></script>
+</body>
+</html>
