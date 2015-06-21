@@ -9,6 +9,10 @@
                 "parents": {
                     "/*": [
                         {
+                            "xml": "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>",
+                            "count": 1
+                        },
+                        {
                             "xml": "<feature name=\"Contacts\"><param name=\"android-package\" value=\"org.apache.cordova.contacts.ContactManager\" /></feature>",
                             "count": 1
                         }
@@ -36,9 +40,16 @@
         }
     },
     "installed_plugins": {
+        "com.msopentech.azure-mobile-services": {
+            "PACKAGE_NAME": "io.cordova.BlankCordovaApp1"
+        },
         "org.apache.cordova.contacts": {
             "PACKAGE_NAME": "io.cordova.BlankCordovaApp1"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "org.apache.cordova.inappbrowser": {
+            "PACKAGE_NAME": "io.cordova.BlankCordovaApp1"
+        }
+    }
 }

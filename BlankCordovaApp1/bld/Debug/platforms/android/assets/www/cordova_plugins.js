@@ -1,6 +1,16 @@
 cordova.define('cordova/plugin_list', function(require, exports, module) {
 module.exports = [
     {
+        "file": "plugins/com.msopentech.azure-mobile-services/www/MobileServices.Web.Ext.js",
+        "id": "com.msopentech.azure-mobile-services.AzureMobileServices.Ext",
+        "runs": true
+    },
+    {
+        "file": "plugins/com.msopentech.azure-mobile-services/www/MobileServices.Web-1.1.3.js",
+        "id": "com.msopentech.azure-mobile-services.AzureMobileServices",
+        "runs": true
+    },
+    {
         "file": "plugins/org.apache.cordova.contacts/www/contacts.js",
         "id": "org.apache.cordova.contacts.contacts",
         "clobbers": [
@@ -62,12 +72,21 @@ module.exports = [
         "merges": [
             ""
         ]
+    },
+    {
+        "file": "plugins/org.apache.cordova.inappbrowser/www/inappbrowser.js",
+        "id": "org.apache.cordova.inappbrowser.inappbrowser",
+        "clobbers": [
+            "window.open"
+        ]
     }
 ];
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "org.apache.cordova.contacts": "0.2.13"
+    "com.msopentech.azure-mobile-services": "0.1.4",
+    "org.apache.cordova.contacts": "0.2.13",
+    "org.apache.cordova.inappbrowser": "0.6.0"
 }
 // BOTTOM OF METADATA
 });
