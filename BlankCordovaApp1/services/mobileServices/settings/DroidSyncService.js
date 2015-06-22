@@ -3,5 +3,5 @@ var DroidSyncServiceClient;
 document.addEventListener("deviceready", function () {    
     DroidSyncServiceClient = new WindowsAzure.MobileServiceClient(
                     "https://droidsyncservice.azure-mobile.net/",
-                    "TWbsJdVTuCCjsPdFamBdNPXkUOpnXB82");
+                    "pCMHFJTONrcsSrHrpZTohJYqcjzTbC48");
 });

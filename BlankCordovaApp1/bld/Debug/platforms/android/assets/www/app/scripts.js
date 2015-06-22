@@ -1,4 +1,14 @@
-﻿var droidSync = angular.module('droidSync', ['ionic', 'ngRoute']);
+﻿//Initializing the App 
+var droidSync = angular.module('droidSync', ['ionic', 'ngRoute']);
+
+//Linking the Azure Mobile Service
+var AzureService;
+document.addEventListener("deviceready", function () {
+    AzureService = new WindowsAzure.MobileServiceClient(
+                    "https://droidsyncservice.azure-mobile.net/",
+                    "pCMHFJTONrcsSrHrpZTohJYqcjzTbC48");
+});
+
 
 droidSync.config(function ($routeProvider) {
     $routeProvider
@@ -99,7 +109,7 @@ droidSync.controller('managerController', function ($scope) {
 
 
     $scope.saveContact = function () {
-
+        var table = AzureService.getTable('contact');
         var contact = navigator.contacts.create();
 
         if ($scope.contact.id !== 'undefined') {
@@ -129,6 +139,8 @@ droidSync.controller('managerController', function ($scope) {
 
         // save to device
         contact.save();
+        table.insert({ id: "2", firstname: name.givenName, lastname: name.familyName, homephone: phoneNumbers[0].value, mobilephone: phoneNumbers[1].value, email: emails[0].value });
+
     }
 });
 
