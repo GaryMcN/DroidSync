@@ -60,6 +60,7 @@ droidSync.controller('managerController', function ($scope) {
 
     //Initialize model
     $scope.contact = {};
+    var id = null;
 
     // Create a new contact
     $scope.createContact = function () {
@@ -112,11 +113,6 @@ droidSync.controller('managerController', function ($scope) {
         var table = AzureService.getTable('contact');
         var contact = navigator.contacts.create();
 
-        if ($scope.contact.id !== 'undefined') {
-            contact.id = $scope.contact.id;
-            contact.rawId = $scope.contact.id;
-        }
-
         // Display Name and Email
         contact.displayName = $scope.contact.firstName;
         contact.nickname = $scope.contact.lastName;
@@ -137,10 +133,26 @@ droidSync.controller('managerController', function ($scope) {
         name.familyName = $scope.contact.lastName;
         contact.name = name;
 
-        // save to device
-        contact.save();
-        table.insert({ id: "2", firstname: name.givenName, lastname: name.familyName, homephone: phoneNumbers[0].value, mobilephone: phoneNumbers[1].value, email: emails[0].value });
+        // Update if the ID exists or save as new contact if ID does not exist
+        if ($scope.contact.id === undefined) {
+            contact.save(onSuccess, onError);
+            table.insert({ id: id, firstname: name.givenName, lastname: name.familyName, homephone: phoneNumbers[0].value, mobilephone: phoneNumbers[1].value, email: emails[0].value });
 
+        }
+        else {
+            contact.id = $scope.contact.id;
+            contact.save();
+            table.update({ id: contact.id, firstname: name.givenName, lastname: name.familyName, homephone: phoneNumbers[0].value, mobilephone: phoneNumbers[1].value, email: emails[0].value });
+        }
+
+
+        function onSuccess(newContact) {
+            console.log("Contact ID is: ", newContact.id);
+            id = newContact.id;
+        }
+        function onError(contactError) {
+            alert('Lol No Error Handling!');
+        }
     }
 });
 

@@ -133,6 +133,7 @@
     "scripts\\i18n\\angular-locale_twq-ne.js",
     "scripts\\i18n\\angular-locale_kkj-cm.js",
     "scripts\\i18n\\angular-locale_ar-001.js",
+    "services\\mobileServices\\settings\\DroidSyncService.js",
     "scripts\\i18n\\angular-locale_kok.js",
     "plugins\\org.apache.cordova.contacts\\doc\\fr\\index.md",
     "scripts\\i18n\\angular-locale_rwk.js",
@@ -988,16 +989,11 @@
     "scripts\\i18n\\angular-locale_en-pr.js",
     "scripts\\i18n\\angular-locale_en-pw.js",
     "scripts\\angular-messages.js",
-    "scripts\\i18n\\angular-locale_pt-pt.js",
-    "services\\mobileServices\\settings\\DroidSyncService.js"
+    "scripts\\i18n\\angular-locale_pt-pt.js"
   ],
   "deletedFilesIos": [],
   "addedPluginsIos": [],
-  "deletedPluginsIos": [
-    "org.apache.cordova.contacts",
-    "org.apache.cordova.inappbrowser",
-    "com.msopentech.azure-mobile-services"
-  ],
+  "deletedPluginsIos": [],
   "changedFiles": [
     "app\\scripts.js"
   ],
