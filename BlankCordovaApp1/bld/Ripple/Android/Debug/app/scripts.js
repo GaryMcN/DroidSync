@@ -81,7 +81,8 @@ droidSync.controller('managerController', function ($scope) {
                 $scope.contact.mobileNo = contact.phoneNumbers[0].value;
                 $scope.contact.homeNo = contact.phoneNumbers[1].value;
                 $scope.contact.email = contact.emails[0].value;
-                $scope.contact.id = contact.id;
+                //$scope.contact.id = contact.id;
+                id = contact.id;
             });
         })
     };
@@ -90,24 +91,11 @@ droidSync.controller('managerController', function ($scope) {
 
         var contact = navigator.contacts.create();
 
-        if (contact.id !== 'undefined') {
-            contact.id = $scope.contact.id;
+        if (id !== undefined) {
+            contact.id = id;
             contact.remove();
         }
     }
-
-    $scope.findContact = function () {
-        var fields = ["id"];
-        navigator.contacts.find(fields, onSuccess);
-        
-
-        function onSuccess(contacts) {
-            for (var i = 0; i < contacts.length; i++) {
-                console.log("IDs = " + contacts[i].id);
-            }
-        }
-    }
-
 
     $scope.saveContact = function () {
         var table = AzureService.getTable('contact');
@@ -133,25 +121,30 @@ droidSync.controller('managerController', function ($scope) {
         name.familyName = $scope.contact.lastName;
         contact.name = name;
 
-        // Update if the ID exists or save as new contact if ID does not exist
-        if ($scope.contact.id === undefined) {
-            contact.save(onSuccess, onError);
-            table.insert({ id: id, firstname: name.givenName, lastname: name.familyName, homephone: phoneNumbers[0].value, mobilephone: phoneNumbers[1].value, email: emails[0].value });
-
+        //If there is no id, it is a new contact, otherwise it is an update
+        if (id == null || id == undefined) {
+            contact.save(saveSuccess, saveError);
         }
         else {
-            contact.id = $scope.contact.id;
-            contact.save();
-            table.update({ id: contact.id, firstname: name.givenName, lastname: name.familyName, homephone: phoneNumbers[0].value, mobilephone: phoneNumbers[1].value, email: emails[0].value });
+            contact.save(upSuccess, upError);
         }
 
-
-        function onSuccess(newContact) {
-            console.log("Contact ID is: ", newContact.id);
+        function saveSuccess(newContact) {
             id = newContact.id;
+            table.insert({ id: id, firstname: name.givenName, lastname: name.familyName, homephone: phoneNumbers[0].value, mobilephone: phoneNumbers[1].value, email: emails[0].value });
+            id = null;
+            contact.id = null;
         }
-        function onError(contactError) {
-            alert('Lol No Error Handling!');
+        function saveError(contactError) {
+            alert('Error Saving');
+        }
+
+        function upSuccess(newContact) {
+            id = newContact.id;
+            table.update({ id: id, firstname: name.givenName, lastname: name.familyName, homephone: phoneNumbers[0].value, mobilephone: phoneNumbers[1].value, email: emails[0].value });
+        }
+        function upError(contactError) {
+            alert('Error Saving');
         }
     }
 });
