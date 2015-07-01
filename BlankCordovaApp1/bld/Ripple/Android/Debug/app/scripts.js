@@ -1,5 +1,5 @@
 ﻿//Initializing the App 
-var droidSync = angular.module('droidSync', ['ionic', 'ngRoute']);
+var droidSync = angular.module('droidSync', ['ionic', 'ngRoute', 'ui.router']);
 
 //Linking the Azure Mobile Service
 var AzureService;
@@ -44,6 +44,30 @@ droidSync.config(function ($routeProvider) {
     });
 });
 
+droidSync.config(function ($stateProvider, $urlRouterProvider) {
+    $stateProvider
+
+    .state('managermenu', {
+    url: '/managermenu',
+    templateUrl: 'app/pages/managermenu.html',
+    controller: 'managermenuController'
+    })
+    .state('main', {
+        url: '/main',
+        templateUrl: 'app/pages/main.html',
+        controller: 'mainController'
+    })
+    .state('settings', {
+        url: '/settings',
+        templateUrl: 'app/pages/settings.html',
+        controller: 'settingsController'
+    })
+    .state('addcontact', {
+        url: '/addcontact',
+        templateUrl: 'app/pages/addcontact.html',
+        controller: 'managerController'
+    })
+})
 droidSync.controller('mainController', function ($scope) {
 
 });
@@ -56,7 +80,7 @@ droidSync.controller('settingsController', function ($scope) {
 
 });
 
-droidSync.controller('managerController', function ($scope) {
+droidSync.controller('managerController', function ($scope, $state) {
 
     //Initialize model
     $scope.contact = {};
@@ -131,9 +155,9 @@ droidSync.controller('managerController', function ($scope) {
 
         function saveSuccess(newContact) {
             id = newContact.id;
-            table.insert({ id: id, firstname: name.givenName, lastname: name.familyName, homephone: phoneNumbers[0].value, mobilephone: phoneNumbers[1].value, email: emails[0].value });
-            id = null;
-            contact.id = null;
+            table.insert({ contactid: id, firstname: name.givenName, lastname: name.familyName, homephone: phoneNumbers[0].value, mobilephone: phoneNumbers[1].value, email: emails[0].value });
+            alert("Contact Saved.");
+            $state.go('managermenu');
         }
         function saveError(contactError) {
             alert('Error Saving');
@@ -141,7 +165,7 @@ droidSync.controller('managerController', function ($scope) {
 
         function upSuccess(newContact) {
             id = newContact.id;
-            table.update({ id: id, firstname: name.givenName, lastname: name.familyName, homephone: phoneNumbers[0].value, mobilephone: phoneNumbers[1].value, email: emails[0].value });
+            table.update({ contactid: id, firstname: name.givenName, lastname: name.familyName, homephone: phoneNumbers[0].value, mobilephone: phoneNumbers[1].value, email: emails[0].value });
         }
         function upError(contactError) {
             alert('Error Saving');

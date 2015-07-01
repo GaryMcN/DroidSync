@@ -21,22 +21,22 @@
     </ion-header-bar>
 
     <ion-content padding="true" has-bouncing="true" class="has-header has-footer">
-        <div id="main" ng-view>
+        <div id="main" ui-view>
             <!--Template Content Injected Here-->
         </div>
     </ion-content>
         
 
     <div class="tabs tabs-icon-top">
-        <a class="tab-item" href="#managermenu">
+        <a class="tab-item" ui-sref="managermenu">
             <i class="icon ion-person-stalker"></i>
             Manager
         </a>
-        <a class="tab-item" href="#/">
+        <a class="tab-item" ui-sref="main">
             <i class="icon ion-loop"></i>
             Sync
         </a>
-        <a class="tab-item" href="#settings">
+        <a class="tab-item" ui-sref="settings">
             <i class="icon ion-android-settings"></i>
             Settings
         </a>
