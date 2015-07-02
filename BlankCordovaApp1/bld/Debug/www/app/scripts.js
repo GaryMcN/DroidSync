@@ -10,50 +10,53 @@ document.addEventListener("deviceready", function () {
 });
 
 
-droidSync.config(function ($routeProvider) {
-    $routeProvider
+//droidSync.config(function ($routeProvider) {
+//    $routeProvider
 
-    .when('/', {
-        templateUrl: 'app/pages/main.html',
-        controller: 'mainController'
-    })
+//    .when('/', {
+//        templateUrl: 'app/pages/main.html',
+//        controller: 'mainController'
+//    })
 
-    .when('/addcontact', {
-        templateUrl: 'app/pages/addcontact.html',
-        controller: 'managerController'
-    })
+//    .when('/addcontact', {
+//        templateUrl: 'app/pages/addcontact.html',
+//        controller: 'managerController'
+//    })
 
-    .when('/editcontact', {
-        templateUrl: 'app/pages/editcontact.html',
-        controller: 'managerController'
-    })
+//    .when('/editcontact', {
+//        templateUrl: 'app/pages/editcontact.html',
+//        controller: 'managerController'
+//    })
 
-    .when('/deletecontact', {
-        templateUrl: 'app/pages/deletecontact.html',
-        controller: 'managerController'
-    })
+//    .when('/deletecontact', {
+//        templateUrl: 'app/pages/deletecontact.html',
+//        controller: 'managerController'
+//    })
 
-    .when('/managermenu', {
-        templateUrl: 'app/pages/managermenu.html',
-        controller: 'managermenuController'
-    })
+//    .when('/managermenu', {
+//        templateUrl: 'app/pages/managermenu.html',
+//        controller: 'managermenuController'
+//    })
 
-    .when('/settings', {
-        templateUrl: 'app/pages/settings.html',
-        controller: 'settingsController'
-    });
-});
+//    .when('/settings', {
+//        templateUrl: 'app/pages/settings.html',
+//        controller: 'settingsController'
+//    });
+//});
 
 droidSync.config(function ($stateProvider, $urlRouterProvider) {
+
+    $urlRouterProvider.otherwise('/');
+
     $stateProvider
 
     .state('managermenu', {
-    url: '/managermenu',
-    templateUrl: 'app/pages/managermenu.html',
-    controller: 'managermenuController'
+        url: '/managermenu',
+        templateUrl: 'app/pages/managermenu.html',
+        controller: 'managermenuController'
     })
     .state('main', {
-        url: '/main',
+        url: '/',
         templateUrl: 'app/pages/main.html',
         controller: 'mainController'
     })
@@ -67,7 +70,18 @@ droidSync.config(function ($stateProvider, $urlRouterProvider) {
         templateUrl: 'app/pages/addcontact.html',
         controller: 'managerController'
     })
-})
+    .state('editcontact', {
+        url: '/editcontact',
+        templateUrl: 'app/pages/editcontact.html',
+        controller: 'managerController'
+    })
+    .state('deletecontact', {
+        url: '/editcontact',
+        templateUrl: 'app/pages/deletecontact.html',
+        controller: 'managerController'
+    })
+});
+
 droidSync.controller('mainController', function ($scope) {
 
 });
@@ -89,7 +103,7 @@ droidSync.controller('managerController', function ($scope, $state) {
     // Create a new contact
     $scope.createContact = function () {
         // Contact Object
-        contact = navigator.contacts.create();
+        // contact = navigator.contacts.create();
         $scope.saveContact();
     };
 
@@ -112,12 +126,19 @@ droidSync.controller('managerController', function ($scope, $state) {
     };
 
     $scope.deleteContact = function () {
-
+        var table = AzureService.getTable('contact');
         var contact = navigator.contacts.create();
+        contact.id = id;
+        contact.remove(delSuccess, delError);
 
-        if (id !== undefined) {
-            contact.id = id;
-            contact.remove();
+        function delSuccess(delContact) {
+            table.del({ id: id });
+            alert("Contact Deleted");
+            $state.go('managermenu');
+        }
+        function delError(contactError) {
+            alert('Error Deleting');
+            $state.go('managermenu');
         }
     }
 
@@ -150,25 +171,35 @@ droidSync.controller('managerController', function ($scope, $state) {
             contact.save(saveSuccess, saveError);
         }
         else {
-            contact.save(upSuccess, upError);
+            contact.id = id;
+            contact.save();
         }
 
+
+        // Error Handling
+
+        // Add Contact
         function saveSuccess(newContact) {
             id = newContact.id;
-            table.insert({ contactid: id, firstname: name.givenName, lastname: name.familyName, homephone: phoneNumbers[0].value, mobilephone: phoneNumbers[1].value, email: emails[0].value });
+            table.insert({ id: id, firstname: name.givenName, lastname: name.familyName, homephone: phoneNumbers[0].value, mobilephone: phoneNumbers[1].value, email: emails[0].value });
             alert("Contact Saved.");
             $state.go('managermenu');
         }
         function saveError(contactError) {
             alert('Error Saving');
+            $state.go('managermenu');
         }
 
-        function upSuccess(newContact) {
-            id = newContact.id;
-            table.update({ contactid: id, firstname: name.givenName, lastname: name.familyName, homephone: phoneNumbers[0].value, mobilephone: phoneNumbers[1].value, email: emails[0].value });
+        // Update Contact
+        function upSuccess(upContact) {
+            id = upContact.id;
+            table.update({ id: id, firstname: name.givenName, lastname: name.familyName, homephone: phoneNumbers[0].value, mobilephone: phoneNumbers[1].value, email: emails[0].value });
+            alert("Contact Updated");
+            //$state.go('managermenu');
         }
         function upError(contactError) {
             alert('Error Saving');
+            $state.go('managermenu');
         }
     }
 });
