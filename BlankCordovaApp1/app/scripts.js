@@ -176,7 +176,8 @@ droidSync.controller('managerController', function ($scope, $state) {
         }
         else {
             contact.id = id;
-            contact.save();
+            contact.rawId = id;
+            contact.save(upSuccess, upError);
         }
 
 
@@ -199,7 +200,7 @@ droidSync.controller('managerController', function ($scope, $state) {
             id = upContact.id;
             table.update({ id: id, firstname: name.givenName, lastname: name.familyName, homephone: phoneNumbers[0].value, mobilephone: phoneNumbers[1].value, email: emails[0].value });
             alert("Contact Updated");
-            //$state.go('managermenu');
+            $state.go('managermenu');
         }
         function upError(contactError) {
             alert('Error Saving');

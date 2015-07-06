@@ -1,12 +1,13 @@
 {
   "changedFilesIos": [
-    "app\\scripts.js",
-    "app\\pages\\addcontact.html"
+    "app\\scripts.js"
   ],
   "deletedFilesIos": [],
   "addedPluginsIos": [],
   "deletedPluginsIos": [],
-  "changedFiles": [],
+  "changedFiles": [
+    "app\\scripts.js"
+  ],
   "deletedFiles": [],
   "addedPlugins": [],
   "deletedPlugins": []
