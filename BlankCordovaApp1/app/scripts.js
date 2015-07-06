@@ -55,26 +55,31 @@ droidSync.config(function ($stateProvider, $urlRouterProvider) {
         templateUrl: 'app/pages/managermenu.html',
         controller: 'managermenuController'
     })
+
     .state('main', {
         url: '/',
         templateUrl: 'app/pages/main.html',
         controller: 'mainController'
     })
+
     .state('settings', {
         url: '/settings',
         templateUrl: 'app/pages/settings.html',
         controller: 'settingsController'
     })
+
     .state('addcontact', {
         url: '/addcontact',
         templateUrl: 'app/pages/addcontact.html',
         controller: 'managerController'
     })
+
     .state('editcontact', {
         url: '/editcontact',
         templateUrl: 'app/pages/editcontact.html',
         controller: 'managerController'
     })
+
     .state('deletecontact', {
         url: '/editcontact',
         templateUrl: 'app/pages/deletecontact.html',
@@ -112,7 +117,6 @@ droidSync.controller('managerController', function ($scope, $state) {
                 $scope.contact.mobileNo = contact.phoneNumbers[0].value;
                 $scope.contact.homeNo = contact.phoneNumbers[1].value;
                 $scope.contact.email = contact.emails[0].value;
-                //$scope.contact.id = contact.id;
                 id = contact.id;
             });
         })
@@ -136,8 +140,15 @@ droidSync.controller('managerController', function ($scope, $state) {
     }
 
     $scope.saveContact = function () {
+
+        // Get Table From Azure Mobile Services
         var table = AzureService.getTable('contact');
-        var contact = navigator.contacts.create();
+
+        // Check for existance of contact object
+        if (contact == null || contact == undefined)
+        {
+            var contact = navigator.contacts.create();
+        }
 
         // Display Name and Email
         contact.displayName = $scope.contact.firstName;
