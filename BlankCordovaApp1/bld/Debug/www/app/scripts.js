@@ -89,6 +89,16 @@ droidSync.config(function ($stateProvider, $urlRouterProvider) {
 
 droidSync.controller('mainController', function ($scope) {
 
+    $scope.contacts = [{}];
+
+    $scope.syncContacts = function () {
+
+        var table = AzureService.getTable('contact');
+        table.read().done(function (results) {
+            console.log(results);
+        })
+    }
+        
 });
 
 droidSync.controller('managermenuController', function ($scope) {
