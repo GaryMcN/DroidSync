@@ -57,16 +57,53 @@ droidSync.controller('mainController', function ($scope) {
     $scope.contacts = [{}];
 
     $scope.syncContacts = function () {
-
+        
         var table = AzureService.getTable('contact');
+        //use a var = table.read maybe?
         table.read().done(function (results) {
             for (var i = 0; i < results.length; i++) {
-                console.log(results[i].id);
-                console.log(results[i].firstname);
-                console.log(results[i].lastname);
-                console.log(results[i].homephone);
-                console.log(results[i].mobilephone);
-                console.log(results[i].email);
+                
+                var id = results[i].id;
+                var firstname = results[i].firstname;
+                var lastname = results[i].lastname;
+                var homephone = results[i].homephone;
+                var mobile = results[i].mobilephone;
+                var email = results[i].email;
+
+                var contact = navigator.contacts.create();
+
+                //contact.id = id;
+                //contact.rawId = id;
+
+                //find by name
+
+                // Display Name and Email
+                contact.displayName = firstname;
+                contact.nickname = lastname;
+
+                var emails = [];
+                emails[0] = new ContactField('work', email, true)
+                contact.emails = emails;
+
+                // Phone Numbers
+                var phoneNumbers = [];
+                phoneNumbers[0] = new ContactField('mobile', mobile, true); // preferred number
+                phoneNumbers[1] = new ContactField('home', homephone, false);
+                contact.phoneNumbers = phoneNumbers;
+
+                // Names
+                var name = new ContactName();
+                name.givenName = firstname;
+                name.familyName = lastname;
+                contact.name = name;
+
+                contact.save();
+                //function onSuccess() {
+                //    alert('This should not be firing');
+                //}
+                //function onError() {
+                //    alert('Error: ' + error.code);
+                //}
             }
         })
     }
@@ -100,6 +137,7 @@ droidSync.controller('managerController', function ($scope, $state) {
                 $scope.contact.homeNo = contact.phoneNumbers[1].value;
                 $scope.contact.email = contact.emails[0].value;
                 id = contact.id;
+                console.log(id);
             });
         })
     };
@@ -190,4 +228,3 @@ droidSync.controller('managerController', function ($scope, $state) {
         }
     }
 });
-
