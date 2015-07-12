@@ -256,36 +256,5 @@ droidSync.controller('managerController', function ($scope, $state) {
             
             
         }
-
-
-        // Error Handling
-
-        // Add Contact
-    //    function saveSuccess(newContact) {
-    //        alert("Contact Saved.");
-    //        $state.go('managermenu');
-    //    }
-    //    function saveError(contactError) {
-    //        alert('Error Saving');
-    //        $state.go('managermenu');
-    //    }
-
-    //    // Update Contact
-    //    function upSuccess(upContact) {
-    //        id = upContact.id;
-    //        table.update({ /*id: id,*/
-    //            firstname: name.givenName,
-    //            lastname: name.familyName,
-    //            homephone: phoneNumbers[0].value,
-    //            mobilephone: phoneNumbers[1].value,
-    //            email: emails[0].value
-    //        });
-    //        alert("Contact Updated");
-    //        $state.go('managermenu');
-    //    }
-    //    function upError(contactError) {
-    //        alert('Error Saving');
-    //        $state.go('managermenu');
-    //    }
     }
 });
