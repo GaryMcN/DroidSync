@@ -98,12 +98,6 @@ droidSync.controller('mainController', function ($scope) {
                 contact.name = name;
 
                 contact.save();
-                //function onSuccess() {
-                //    alert('This should not be firing');
-                //}
-                //function onError() {
-                //    alert('Error: ' + error.code);
-                //}
             }
         })
     }
@@ -123,6 +117,7 @@ droidSync.controller('managerController', function ($scope, $state) {
     //Initialize model
     $scope.contact = {};
     var id = null;
+    var azureId = null;
 
     // Pick Contact from Device
     $scope.editContact = function () {
@@ -137,7 +132,9 @@ droidSync.controller('managerController', function ($scope, $state) {
                 $scope.contact.homeNo = contact.phoneNumbers[1].value;
                 $scope.contact.email = contact.emails[0].value;
                 id = contact.id;
+                azureId = contact.note;
                 console.log("contact id is: ", id);
+                console.log("contact azureId is: ", azureId);
             });
         })
     };
@@ -165,15 +162,14 @@ droidSync.controller('managerController', function ($scope, $state) {
         var table = AzureService.getTable('contact');
 
         // Check for existance of contact object
-        if (contact == null || contact == undefined)
-        {
+        if (contact == null || contact == undefined) {
             var contact = navigator.contacts.create();
         }
 
-        // Display Name and Email
-        contact.displayName = $scope.contact.firstName;
-        contact.nickname = $scope.contact.lastName;
-
+        if (id !== null && id !== undefined) {
+            contact.id = id;
+            contact.rawId = id;
+        }
         var emails = [];
         emails[0] = new ContactField('work', $scope.contact.email, true)
         contact.emails = emails;
@@ -182,7 +178,7 @@ droidSync.controller('managerController', function ($scope, $state) {
         var phoneNumbers = [];
         phoneNumbers[0] = new ContactField('mobile', $scope.contact.mobileNo, true); // preferred number
         phoneNumbers[1] = new ContactField('home', $scope.contact.homeNo, false);
-        contact.phoneNumbers = phoneNumbers;
+        contact.phoneNumbers == phoneNumbers;
 
         // Names
         var name = new ContactName();
@@ -206,49 +202,71 @@ droidSync.controller('managerController', function ($scope, $state) {
 
                 function saveSuccess() {
                     alert("Contact Saved");
+                    $state.go('managermenu');
                 }
                 function saveError() {
                     alert("Error Saving Contact");
+                    $state.go('managermenu');
                 }
-            });
-
-            
+            })
         }
         else {
-            contact.id = id;
-            contact.rawId = id;
-            contact.save(upSuccess, upError);
+            var updateContact = {
+                id: azureId,
+                firstname: name.givenName,
+                lastname: name.familyName,
+                homephone: phoneNumbers[0].value,
+                mobilephone: phoneNumbers[1].value,
+                email: emails[0].value
+            };
+            table.update(updateContact).done(function (updated) {
+                console.log("Updated Contact Id is: ", updated.id);
+                console.log("emails are: ", contact.emails);
+
+                contact.note = updated.id;
+                contact.save(upSuccess, upError);
+
+                function upSuccess() {
+                    alert('Update Successful');
+                    $state.go('managermenu');
+                }
+                function upError() {
+                    alert('Error Updating Contact');
+                    $state.go('managermenu');
+                }
+            })
+            
         }
 
 
         // Error Handling
 
         // Add Contact
-        function saveSuccess(newContact) {
-            alert("Contact Saved.");
-            $state.go('managermenu');
-        }
-        function saveError(contactError) {
-            alert('Error Saving');
-            $state.go('managermenu');
-        }
+    //    function saveSuccess(newContact) {
+    //        alert("Contact Saved.");
+    //        $state.go('managermenu');
+    //    }
+    //    function saveError(contactError) {
+    //        alert('Error Saving');
+    //        $state.go('managermenu');
+    //    }
 
-        // Update Contact
-        function upSuccess(upContact) {
-            id = upContact.id;
-            table.update({ /*id: id,*/
-                firstname: name.givenName,
-                lastname: name.familyName,
-                homephone: phoneNumbers[0].value,
-                mobilephone: phoneNumbers[1].value,
-                email: emails[0].value
-            });
-            alert("Contact Updated");
-            $state.go('managermenu');
-        }
-        function upError(contactError) {
-            alert('Error Saving');
-            $state.go('managermenu');
-        }
+    //    // Update Contact
+    //    function upSuccess(upContact) {
+    //        id = upContact.id;
+    //        table.update({ /*id: id,*/
+    //            firstname: name.givenName,
+    //            lastname: name.familyName,
+    //            homephone: phoneNumbers[0].value,
+    //            mobilephone: phoneNumbers[1].value,
+    //            email: emails[0].value
+    //        });
+    //        alert("Contact Updated");
+    //        $state.go('managermenu');
+    //    }
+    //    function upError(contactError) {
+    //        alert('Error Saving');
+    //        $state.go('managermenu');
+    //    }
     }
 });
