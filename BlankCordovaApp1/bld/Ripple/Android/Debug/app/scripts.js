@@ -192,7 +192,27 @@ droidSync.controller('managerController', function ($scope, $state) {
 
         //If there is no id, it is a new contact, otherwise it is an update
         if (id == null || id == undefined) {
-            contact.save(saveSuccess, saveError);
+            var newContact = {
+                firstname: name.givenName,
+                lastname: name.familyName,
+                homephone: phoneNumbers[0].value,
+                mobilephone: phoneNumbers[1].value,
+                email: emails[0].value
+            };
+            table.insert(newContact).done(function (inserted) {
+                console.log("Id is: ", inserted.id);
+                contact.note = inserted.id;
+                contact.save(saveSuccess, saveError);
+
+                function saveSuccess() {
+                    alert("Contact Saved");
+                }
+                function saveError() {
+                    alert("Error Saving Contact");
+                }
+            });
+
+            
         }
         else {
             contact.id = id;
@@ -205,8 +225,6 @@ droidSync.controller('managerController', function ($scope, $state) {
 
         // Add Contact
         function saveSuccess(newContact) {
-            id = newContact.id;
-            table.insert({ id: id, firstname: name.givenName, lastname: name.familyName, homephone: phoneNumbers[0].value, mobilephone: phoneNumbers[1].value, email: emails[0].value });
             alert("Contact Saved.");
             $state.go('managermenu');
         }
@@ -218,7 +236,13 @@ droidSync.controller('managerController', function ($scope, $state) {
         // Update Contact
         function upSuccess(upContact) {
             id = upContact.id;
-            table.update({ /*id: id,*/ firstname: name.givenName, lastname: name.familyName, homephone: phoneNumbers[0].value, mobilephone: phoneNumbers[1].value, email: emails[0].value });
+            table.update({ /*id: id,*/
+                firstname: name.givenName,
+                lastname: name.familyName,
+                homephone: phoneNumbers[0].value,
+                mobilephone: phoneNumbers[1].value,
+                email: emails[0].value
+            });
             alert("Contact Updated");
             $state.go('managermenu');
         }
