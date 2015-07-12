@@ -54,8 +54,6 @@ droidSync.config(function ($stateProvider, $urlRouterProvider) {
 
 droidSync.controller('mainController', function ($scope) {
 
-    $scope.contacts = [{}];
-
     $scope.syncContacts = function () {
         
         var table = AzureService.getTable('contact');
@@ -118,6 +116,9 @@ droidSync.controller('managerController', function ($scope, $state) {
     $scope.contact = {};
     var id = null;
     var azureId = null;
+    var homePhoneId = null;
+    var mobilePhoneId = null;
+    var emailId = null;
 
     // Pick Contact from Device
     $scope.editContact = function () {
@@ -133,6 +134,9 @@ droidSync.controller('managerController', function ($scope, $state) {
                 $scope.contact.email = contact.emails[0].value;
                 id = contact.id;
                 azureId = contact.note;
+                mobilePhoneId = contact.phoneNumbers[0].id;
+                homePhoneId = contact.phoneNumbers[1].id;
+                emailId = contact.emails[0].id;
                 console.log("contact id is: ", id);
                 console.log("contact azureId is: ", azureId);
             });
@@ -160,11 +164,12 @@ droidSync.controller('managerController', function ($scope, $state) {
 
         // Get Table From Azure Mobile Services
         var table = AzureService.getTable('contact');
+        var contact = navigator.contacts.create();
 
         // Check for existance of contact object
-        if (contact == null || contact == undefined) {
-            var contact = navigator.contacts.create();
-        }
+        //if (contact == null || contact == undefined) {
+        
+        //}
 
         if (id !== null && id !== undefined) {
             contact.id = id;
@@ -175,10 +180,24 @@ droidSync.controller('managerController', function ($scope, $state) {
         contact.emails = emails;
 
         // Phone Numbers
-        var phoneNumbers = [];
-        phoneNumbers[0] = new ContactField('mobile', $scope.contact.mobileNo, true); // preferred number
-        phoneNumbers[1] = new ContactField('home', $scope.contact.homeNo, false);
-        contact.phoneNumbers = phoneNumbers;
+        if (mobilePhoneId == null && homePhoneId == null) {
+            var phoneNumbers = [];
+            phoneNumbers[0] = new ContactField('mobile', $scope.contact.mobileNo, true); // preferred number
+            phoneNumbers[1] = new ContactField('home', $scope.contact.homeNo, false);
+            contact.phoneNumbers = phoneNumbers;
+        }
+        else {
+            var phoneNumbers = [];
+            phoneNumbers[0] = new ContactField('mobile', $scope.contact.mobileNo, true); // preferred number
+            phoneNumbers[0].id = mobilePhoneId;
+            phoneNumbers[1] = new ContactField('home', $scope.contact.homeNo, false);
+            phoneNumbers[1].id = homePhoneId;
+            contact.phoneNumbers = phoneNumbers;
+        }
+        //var phoneNumbers = [];
+        //phoneNumbers[0] = new ContactField('mobile', $scope.contact.mobileNo, true); // preferred number
+        //phoneNumbers[1] = new ContactField('home', $scope.contact.homeNo, false);
+        //contact.phoneNumbers = phoneNumbers;
 
         // Names
         var name = new ContactName();
@@ -221,7 +240,6 @@ droidSync.controller('managerController', function ($scope, $state) {
             };
             table.update(updateContact).done(function (updated) {
                 console.log("Updated Contact Id is: ", updated.id);
-                console.log("emails are: ", contact.emails);
 
                 contact.note = updated.id;
                 contact.save(upSuccess, upError);
@@ -235,6 +253,7 @@ droidSync.controller('managerController', function ($scope, $state) {
                     $state.go('managermenu');
                 }
             })
+            
             
         }
 
