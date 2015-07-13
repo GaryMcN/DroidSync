@@ -57,47 +57,20 @@ droidSync.controller('mainController', function ($scope) {
     $scope.syncContacts = function () {
 
         var table = AzureService.getTable('contact');
-        //use a var = table.read maybe?
+        var contactList = [];
         table.read().done(function (results) {
             for (var i = 0; i < results.length; i++) {
-
-                var id = results[i].id;
-                var firstname = results[i].firstname;
-                var lastname = results[i].lastname;
-                var homephone = results[i].homephone;
-                var mobile = results[i].mobilephone;
-                var email = results[i].email;
-
-                var contact = navigator.contacts.create();
-
-                //contact.id = id;
-                //contact.rawId = id;
-
-                //find by name
-
-                // Display Name and Email
-                contact.displayName = firstname;
-                contact.nickname = lastname;
-
-                var emails = [];
-                emails[0] = new ContactField('work', email, true)
-                contact.emails = emails;
-
-                // Phone Numbers
-                var phoneNumbers = [];
-                phoneNumbers[0] = new ContactField('mobile', mobile, true); // preferred number
-                phoneNumbers[1] = new ContactField('home', homephone, false);
-                contact.phoneNumbers = phoneNumbers;
-
-                // Names
-                var name = new ContactName();
-                name.givenName = firstname;
-                name.familyName = lastname;
-                contact.name = name;
-
-                contact.save();
+                contactList[i] = results[i];
+                console.log("Contact Object:", results[i]);
             }
         })
+        console.log("Contact List0:", contactList.Array[0]);
+        console.log("Contact List0:", contactList[1]);
+        //for(var i = 0; i < contactList.length; i++){
+            //check if contact exists on device
+            //if yes check if it should be deleted
+            //check if it should be deleted
+        //}
     };
         
 });
