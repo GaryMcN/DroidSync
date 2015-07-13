@@ -55,12 +55,12 @@ droidSync.config(function ($stateProvider, $urlRouterProvider) {
 droidSync.controller('mainController', function ($scope) {
 
     $scope.syncContacts = function () {
-        
+
         var table = AzureService.getTable('contact');
         //use a var = table.read maybe?
         table.read().done(function (results) {
             for (var i = 0; i < results.length; i++) {
-                
+
                 var id = results[i].id;
                 var firstname = results[i].firstname;
                 var lastname = results[i].lastname;
@@ -98,7 +98,7 @@ droidSync.controller('mainController', function ($scope) {
                 contact.save();
             }
         })
-    }
+    };
         
 });
 
@@ -147,18 +147,20 @@ droidSync.controller('managerController', function ($scope, $state) {
         var table = AzureService.getTable('contact');
         var contact = navigator.contacts.create();
         contact.id = id;
-        contact.remove(delSuccess, delError);
 
-        function delSuccess(delContact) {
-            table.del({ id: id });
-            alert("Contact Deleted");
-            $state.go('managermenu');
-        }
-        function delError(contactError) {
-            alert('Error Deleting');
-            $state.go('managermenu');
-        }
-    }
+        table.update({ id: azureId, isdeleted: true }).done(function (deleted) {
+            contact.remove(delSuccess, delError);
+
+            function delSuccess(delContact) {
+                alert("Contact Deleted");
+                $state.go('managermenu');
+            }
+            function delError(contactError) {
+                alert('Error Deleting');
+                $state.go('managermenu');
+            }
+        })
+    };
 
     $scope.saveContact = function () {
 
@@ -166,18 +168,23 @@ droidSync.controller('managerController', function ($scope, $state) {
         var table = AzureService.getTable('contact');
         var contact = navigator.contacts.create();
 
-        // Check for existance of contact object
-        //if (contact == null || contact == undefined) {
-        
-        //}
-
         if (id !== null && id !== undefined) {
             contact.id = id;
             contact.rawId = id;
         }
-        var emails = [];
-        emails[0] = new ContactField('work', $scope.contact.email, true)
-        contact.emails = emails;
+
+        if (emailId == null || emailId == undefined){
+            var emails = [];
+            emails[0] = new ContactField('work', $scope.contact.email, true);
+            contact.emails = emails;
+        }
+        else {
+            var emails = [];
+            emails[0] = new ContactField('work', $scope.contact.email, true);
+            emails[0].id = emailId;
+            contact.emails = emails;
+        }
+        
 
         // Phone Numbers
         if (mobilePhoneId == null && homePhoneId == null) {
@@ -194,10 +201,6 @@ droidSync.controller('managerController', function ($scope, $state) {
             phoneNumbers[1].id = homePhoneId;
             contact.phoneNumbers = phoneNumbers;
         }
-        //var phoneNumbers = [];
-        //phoneNumbers[0] = new ContactField('mobile', $scope.contact.mobileNo, true); // preferred number
-        //phoneNumbers[1] = new ContactField('home', $scope.contact.homeNo, false);
-        //contact.phoneNumbers = phoneNumbers;
 
         // Names
         var name = new ContactName();
@@ -253,39 +256,6 @@ droidSync.controller('managerController', function ($scope, $state) {
                     $state.go('managermenu');
                 }
             })
-            
-            
         }
-
-
-        // Error Handling
-
-        // Add Contact
-    //    function saveSuccess(newContact) {
-    //        alert("Contact Saved.");
-    //        $state.go('managermenu');
-    //    }
-    //    function saveError(contactError) {
-    //        alert('Error Saving');
-    //        $state.go('managermenu');
-    //    }
-
-    //    // Update Contact
-    //    function upSuccess(upContact) {
-    //        id = upContact.id;
-    //        table.update({ /*id: id,*/
-    //            firstname: name.givenName,
-    //            lastname: name.familyName,
-    //            homephone: phoneNumbers[0].value,
-    //            mobilephone: phoneNumbers[1].value,
-    //            email: emails[0].value
-    //        });
-    //        alert("Contact Updated");
-    //        $state.go('managermenu');
-    //    }
-    //    function upError(contactError) {
-    //        alert('Error Saving');
-    //        $state.go('managermenu');
-    //    }
-    }
+    };
 });
