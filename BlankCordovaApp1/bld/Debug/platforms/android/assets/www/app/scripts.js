@@ -59,28 +59,34 @@ droidSync.controller('mainController', function ($scope) {
 
         var table = AzureService.getTable('contact');
         table.read().done(function (results) {
-            //$scope.contactList = results;
-
             console.log("Results: ", results);
             for (var i = 0; i < results.length; i++) {
-                var contact = navigator.contacts.create();
-                var options = new ContactFindOptions();
-                options.filter = results[i].id;
-                options.multiple = false;
-                var fields = ["note"];
-                navigator.contacts.find(fields, findSuccess, findError, options);
-
-                function findSuccess(findresult) {
-                    if (findresult.length > 0) {
-                        console.log('found contact', contact);
-                        contact = findresult;
+                
+                // If the contact is flagged as deleted check if its on the device and delete it
+                if (results[i].isdeleted == true) {
+                    var options = new ContactFindOptions();
+                    options.filter = results[i].id;
+                    options.multiple = false;
+                    var fields = ["*"];
+                    navigator.contacts.find(fields, findSuccess, findError, options);
+                    function findSuccess(contact) {
+                        if (contact.length > 0) {
+                            console.log("inside the delete area:", contact);
+                            var contactToDelete = navigator.contacts.create();
+                            contactToDelete.id = contact[0].id;
+                            contactToDelete.rawId = contact[0].id;
+                            console.log('we want to delete this', contactToDelete);
+                            contactToDelete.remove();
+                            alert('Contact Deleted');
+                        }
+                        else {
+                            console.log('not this time');
+                        }
+                    }
+                    function findError() {
+                        console.log('find did not execute or had errors');
                     }
                 }
-                function findError() {
-                    console.log('find did not execute or had errors');
-                }
-                console.log('global contact: ', contact);
-                
             }
         });
     };
