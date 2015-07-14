@@ -7,6 +7,7 @@ document.addEventListener("deviceready", function () {
     AzureService = new WindowsAzure.MobileServiceClient(
                     "https://droidsyncservice.azure-mobile.net/",
                     "pCMHFJTONrcsSrHrpZTohJYqcjzTbC48");
+    console.log('azure db ready');
 });
 
 droidSync.config(function ($stateProvider, $urlRouterProvider) {
@@ -57,20 +58,31 @@ droidSync.controller('mainController', function ($scope) {
     $scope.syncContacts = function () {
 
         var table = AzureService.getTable('contact');
-        var contactList = [];
         table.read().done(function (results) {
+            //$scope.contactList = results;
+
+            console.log("Results: ", results);
             for (var i = 0; i < results.length; i++) {
-                contactList[i] = results[i];
-                console.log("Contact Object:", results[i]);
+                var contact = navigator.contacts.create();
+                var options = new ContactFindOptions();
+                options.filter = results[i].id;
+                options.multiple = false;
+                var fields = ["note"];
+                navigator.contacts.find(fields, findSuccess, findError, options);
+
+                function findSuccess(findresult) {
+                    if (findresult.length > 0) {
+                        console.log('found contact', contact);
+                        contact = findresult;
+                    }
+                }
+                function findError() {
+                    console.log('find did not execute or had errors');
+                }
+                
+                
             }
-        })
-        console.log("Contact List0:", contactList.Array[0]);
-        console.log("Contact List0:", contactList[1]);
-        //for(var i = 0; i < contactList.length; i++){
-            //check if contact exists on device
-            //if yes check if it should be deleted
-            //check if it should be deleted
-        //}
+        });
     };
         
 });
