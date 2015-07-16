@@ -73,6 +73,7 @@ droidSync.controller('mainController', function ($scope) {
                         if (contact.length > 0) {
                             console.log("inside the delete area:", contact);
                             var contactToDelete = navigator.contacts.create();
+                            //It is safe to use contact[0] as there will only ever be one returned as AzureID is unique
                             contactToDelete.id = contact[0].id;
                             contactToDelete.rawId = contact[0].id;
                             console.log('we want to delete this', contactToDelete);
@@ -80,11 +81,79 @@ droidSync.controller('mainController', function ($scope) {
                             alert('Contact Deleted');
                         }
                         else {
-                            console.log('not this time');
+                            console.log('Contact to delete not present on device. Checking next contact');
                         }
                     }
                     function findError() {
-                        console.log('find did not execute or had errors');
+                        alert('Contact search failed: Deleted Contact Search');
+                    }
+                }
+                else {
+
+                    //create a contact object to save or update
+                    var emails = [];
+                    var phoneNumbers = [];
+                    var name = new ContactName();
+                    var contactToUpdate = navigator.contacts.create();
+                    contactToUpdate.note = results[i].id;
+                    name.givenName = results[i].firstname;
+                    name.familyName = results[i].lastname;
+                    phoneNumbers[0] = new ContactField('mobile', results[i].mobilephone, true);
+                    phoneNumbers[1] = new ContactField('home', results[i].homephone, false);
+                    emails[0] = new ContactField('work', results[i].email, true);
+                    contactToUpdate.name = name;
+                    contactToUpdate.phoneNumbers = phoneNumbers;
+                    contactToUpdate.emails = emails;
+
+                    //Search for the contact on the device
+                    var options = new ContactFindOptions();
+                    options.filter = results[i].id;
+                    options.multiple = false;
+                    var fields = ["*"];
+                    navigator.contacts.find(fields, foundSuccess, foundError, options);
+
+                    function foundSuccess(contact) {
+                        if (contact.length > 0) {
+                            //The contact has been found on the device. Pass in ids for contact, emails and phone numbers to update.
+                            //console.log('Contact found its device id is', contact[0].id);
+                            //console.log('its phone number id for zero is', contact[0].phoneNumbers[0].id);
+                            //console.log('contactToUpdate = ', contactToUpdate);
+                            //console.log('contactToUpdate PhoneNumber zero = ', contactToUpdate.phoneNumbers[0].value);
+                            //console.log('contactToUpdate PhoneNumber id = ', contactToUpdate.phoneNumbers[0].id);
+                            //console.log('p1:p2:e1', contactToUpdate.phoneNumbers[0].id, contactToUpdate.phoneNumbers[1].id, contactToUpdate.emails[0].id);
+                            console.log('object to update is object is', contact);
+                            console.log('contact array length is ', contact.length);
+                            
+
+                            contactToUpdate.id = contact[0].id;
+                            contactToUpdate.rawId = contact[0].rawId;
+                            contactToUpdate.phoneNumbers[0].id = contact[0].phoneNumbers[0].id;
+                            contactToUpdate.phoneNumbers[1].id = contact[0].phoneNumbers[1].id;
+                            contactToUpdate.emails[0].id = contact[0].emails[0].id;
+                            console.log('about to save this', contactToUpdate);
+                            contactToUpdate.save(upSuccess, upError);
+                            function upSuccess() {
+                                console.log('updated a contact!');
+                            }
+                            function upError(ContactError) {
+                                console.log('error updating a contact!', ContactError.code);
+                            }
+                        }
+                        //else {
+                        //    //The contact does not exist on the device. Just save it.
+                        //    console.log('non existent contact: ', contactToUpdate);
+                        //    contactToUpdate.save(saveSuccess, SaveError);
+                        //    function saveSuccess() {
+                        //        console.log('saved a contact!');
+                        //    }
+                        //    function SaveError() {
+                        //        console.log('error saving a contact!');
+                        //    }
+                            
+                        //}
+                    }
+                    function foundError() {
+                        alert('Contact search failed: Undeleted Contact Search');
                     }
                 }
             }
