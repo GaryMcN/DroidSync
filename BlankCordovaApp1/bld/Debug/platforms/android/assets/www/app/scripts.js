@@ -59,13 +59,14 @@ droidSync.controller('mainController', function ($scope) {
 
         var table = AzureService.getTable('contact');
         table.read().done(function (results) {
-            console.log("Results: ", results);
-            for (var i = 0; i < results.length; i++) {
-                
+
+            results.forEach(function (result) {
+                console.log('result is', result);
+
                 // If the contact is flagged as deleted check if its on the device and delete it
-                if (results[i].isdeleted == true) {
+                if (result.isdeleted == true) {
                     var options = new ContactFindOptions();
-                    options.filter = results[i].id;
+                    options.filter = result.id;
                     options.multiple = false;
                     var fields = ["*"];
                     navigator.contacts.find(fields, findSuccess, findError, options);
@@ -78,36 +79,35 @@ droidSync.controller('mainController', function ($scope) {
                             contactToDelete.rawId = contact[0].id;
                             console.log('we want to delete this', contactToDelete);
                             contactToDelete.remove();
-                            alert('Contact Deleted');
+                            console.log('Contact Deleted');
                         }
                         else {
                             console.log('Contact to delete not present on device. Checking next contact');
                         }
                     }
                     function findError() {
-                        alert('Contact search failed: Deleted Contact Search');
+                        console.log('Contact search failed: Deleted Contact Search');
                     }
                 }
                 else {
-
                     //create a contact object to save or update
                     var emails = [];
                     var phoneNumbers = [];
                     var name = new ContactName();
                     var contactToUpdate = navigator.contacts.create();
-                    contactToUpdate.note = results[i].id;
-                    name.givenName = results[i].firstname;
-                    name.familyName = results[i].lastname;
-                    phoneNumbers[0] = new ContactField('mobile', results[i].mobilephone, true);
-                    phoneNumbers[1] = new ContactField('home', results[i].homephone, false);
-                    emails[0] = new ContactField('work', results[i].email, true);
+                    contactToUpdate.note = result.id;
+                    name.givenName = result.firstname;
+                    name.familyName = result.lastname;
+                    phoneNumbers[0] = new ContactField('mobile', result.mobilephone, true);
+                    phoneNumbers[1] = new ContactField('home', result.homephone, false);
+                    emails[0] = new ContactField('work', result.email, true);
                     contactToUpdate.name = name;
                     contactToUpdate.phoneNumbers = phoneNumbers;
                     contactToUpdate.emails = emails;
 
                     //Search for the contact on the device
                     var options = new ContactFindOptions();
-                    options.filter = results[i].id;
+                    options.filter = result.id;
                     options.multiple = false;
                     var fields = ["*"];
                     navigator.contacts.find(fields, foundSuccess, foundError, options);
@@ -123,7 +123,7 @@ droidSync.controller('mainController', function ($scope) {
                             //console.log('p1:p2:e1', contactToUpdate.phoneNumbers[0].id, contactToUpdate.phoneNumbers[1].id, contactToUpdate.emails[0].id);
                             console.log('object to update is object is', contact);
                             console.log('contact array length is ', contact.length);
-                            
+
 
                             contactToUpdate.id = contact[0].id;
                             contactToUpdate.rawId = contact[0].rawId;
@@ -136,30 +136,28 @@ droidSync.controller('mainController', function ($scope) {
                                 console.log('updated a contact!');
                             }
                             function upError(ContactError) {
-                                console.log('error updating a contact!', ContactError.code);
+                                console.log('error updating a contact!');
                             }
                         }
-                        //else {
-                        //    //The contact does not exist on the device. Just save it.
-                        //    console.log('non existent contact: ', contactToUpdate);
-                        //    contactToUpdate.save(saveSuccess, SaveError);
-                        //    function saveSuccess() {
-                        //        console.log('saved a contact!');
-                        //    }
-                        //    function SaveError() {
-                        //        console.log('error saving a contact!');
-                        //    }
-                            
-                        //}
+                        else {
+                            //The contact does not exist on the device. Just save it.
+                            console.log('non existent contact: ', contactToUpdate);
+                            contactToUpdate.save(saveSuccess, SaveError);
+                            function saveSuccess() {
+                                console.log('saved a contact!');
+                            }
+                            function SaveError() {
+                                console.log('error saving a contact!');
+                            }
+                        }
                     }
                     function foundError() {
-                        alert('Contact search failed: Undeleted Contact Search');
+                        console.log('Contact search failed: Undeleted Contact Search');
                     }
-                }
-            }
-        });
-    };
-        
+                } // end else
+            }); // end forEach
+        }); // table.read()
+    }; // scope.syncContacts()
 });
 
 droidSync.controller('managermenuController', function ($scope) {
