@@ -62,12 +62,6 @@ droidSync.controller('mainController', function ($scope, $ionicLoading) {
         });
         var table = AzureService.getTable('contact');
         table.read().done(function (results) {
-            var counter = 0;
-            if (counter == results.length){
-                console.log('counter is', counter);
-                $ionicLoading.hide()
-                alert('Sync Complete');
-            }
             results.forEach(function (result) {
                 console.log('result is', result);
                 // If the contact is flagged as deleted check if its on the device and delete it
@@ -87,11 +81,9 @@ droidSync.controller('mainController', function ($scope, $ionicLoading) {
                             console.log('we want to delete this', contactToDelete);
                             contactToDelete.remove();
                             console.log('Contact Deleted');
-                            counter++;
                         }
                         else {
                             console.log('Contact to delete not present on device. Checking next contact');
-                            counter++;
                         }
                     }
                     function findError() {
@@ -124,15 +116,8 @@ droidSync.controller('mainController', function ($scope, $ionicLoading) {
                     function foundSuccess(contact) {
                         if (contact.length > 0) {
                             //The contact has been found on the device. Pass in ids for contact, emails and phone numbers to update.
-                            //console.log('Contact found its device id is', contact[0].id);
-                            //console.log('its phone number id for zero is', contact[0].phoneNumbers[0].id);
-                            //console.log('contactToUpdate = ', contactToUpdate);
-                            //console.log('contactToUpdate PhoneNumber zero = ', contactToUpdate.phoneNumbers[0].value);
-                            //console.log('contactToUpdate PhoneNumber id = ', contactToUpdate.phoneNumbers[0].id);
-                            //console.log('p1:p2:e1', contactToUpdate.phoneNumbers[0].id, contactToUpdate.phoneNumbers[1].id, contactToUpdate.emails[0].id);
                             console.log('object to update is object is', contact);
                             console.log('contact array length is ', contact.length);
-
 
                             contactToUpdate.id = contact[0].id;
                             contactToUpdate.rawId = contact[0].rawId;
@@ -143,7 +128,6 @@ droidSync.controller('mainController', function ($scope, $ionicLoading) {
                             contactToUpdate.save(upSuccess, upError);
                             function upSuccess() {
                                 console.log('updated a contact!');
-                                counter++;
                             }
                             function upError(ContactError) {
                                 console.log('error updating a contact!');
@@ -155,7 +139,6 @@ droidSync.controller('mainController', function ($scope, $ionicLoading) {
                             contactToUpdate.save(saveSuccess, SaveError);
                             function saveSuccess() {
                                 console.log('saved a contact!');
-                                counter++;
                             }
                             function SaveError() {
                                 console.log('error saving a contact!');

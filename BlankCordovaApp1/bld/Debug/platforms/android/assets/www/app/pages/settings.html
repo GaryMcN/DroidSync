@@ -1,2 +1,38 @@
-﻿<h1>settings</h1>
-<button class="button button-block button-positive" type="submit" ng-click="Load()">Show Loading Screen</button>
+﻿<ul class="list">
+    <li class="item item-toggle">
+        Automatic Sync
+        <label class="toggle toggle-balanced">
+            <input ng-model="checked" type="checkbox">
+            <div class="track">
+                <div class="handle"></div>
+            </div>
+        </label>
+    </li>
+</ul>
+<div class="list check-element animate-hide" ng-show="checked">
+    <label class="item item-radio">
+        <input type="radio" name="group">
+        <div class="item-content">
+            Every hour
+        </div>
+        <i class="radio-icon ion-checkmark"></i>
+    </label>
+    <label class="item item-radio">
+        <input type="radio" name="group">
+        <div class="item-content">
+            Every 8 hours
+        </div>
+        <i class="radio-icon ion-checkmark"></i>
+    </label>
+    <label class="item item-radio">
+        <input type="radio" name="group">
+        <div class="item-content">
+            Every 24 hours
+        </div>
+        <i class="radio-icon ion-checkmark"></i>
+    </label>
+</div>
+
+<div class="list list-inset">
+    <button class="button button-block button-positive" type="submit">Log Out</button>
+</div>

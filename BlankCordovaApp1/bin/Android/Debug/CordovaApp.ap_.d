@@ -75,6 +75,7 @@ C:\Users\Gary\Google Drive\DBS ICT\Final Project\DroidSync\BlankCordovaApp1\bld\
 C:\Users\Gary\Google Drive\DBS ICT\Final Project\DroidSync\BlankCordovaApp1\bld\Debug\platforms\android\assets\www\app\pages\managermenu.html \
 C:\Users\Gary\Google Drive\DBS ICT\Final Project\DroidSync\BlankCordovaApp1\bld\Debug\platforms\android\assets\www\app\pages\settings.html \
 C:\Users\Gary\Google Drive\DBS ICT\Final Project\DroidSync\BlankCordovaApp1\bld\Debug\platforms\android\assets\www\Content\ionic.css \
+C:\Users\Gary\Google Drive\DBS ICT\Final Project\DroidSync\BlankCordovaApp1\bld\Debug\platforms\android\assets\www\Content\ionic.material.min.css \
 C:\Users\Gary\Google Drive\DBS ICT\Final Project\DroidSync\BlankCordovaApp1\bld\Debug\platforms\android\assets\www\Content\ionic.min.css \
 C:\Users\Gary\Google Drive\DBS ICT\Final Project\DroidSync\BlankCordovaApp1\bld\Debug\platforms\android\assets\www\css\index.css \
 C:\Users\Gary\Google Drive\DBS ICT\Final Project\DroidSync\BlankCordovaApp1\bld\Debug\platforms\android\assets\www\css\ionicons.css \
@@ -144,8 +145,11 @@ C:\Users\Gary\Google Drive\DBS ICT\Final Project\DroidSync\BlankCordovaApp1\bld\
 C:\Users\Gary\Google Drive\DBS ICT\Final Project\DroidSync\BlankCordovaApp1\bld\Debug\platforms\android\assets\www\scripts\ionic.bundle.js \
 C:\Users\Gary\Google Drive\DBS ICT\Final Project\DroidSync\BlankCordovaApp1\bld\Debug\platforms\android\assets\www\scripts\ionic.bundle.min.js \
 C:\Users\Gary\Google Drive\DBS ICT\Final Project\DroidSync\BlankCordovaApp1\bld\Debug\platforms\android\assets\www\scripts\ionic.js \
+C:\Users\Gary\Google Drive\DBS ICT\Final Project\DroidSync\BlankCordovaApp1\bld\Debug\platforms\android\assets\www\scripts\ionic.material.min.js \
 C:\Users\Gary\Google Drive\DBS ICT\Final Project\DroidSync\BlankCordovaApp1\bld\Debug\platforms\android\assets\www\scripts\ionic.min.js \
 C:\Users\Gary\Google Drive\DBS ICT\Final Project\DroidSync\BlankCordovaApp1\bld\Debug\platforms\android\assets\www\scripts\platformOverrides.js \
+C:\Users\Gary\Google Drive\DBS ICT\Final Project\DroidSync\BlankCordovaApp1\bld\Debug\platforms\android\assets\www\scripts\q.js \
+C:\Users\Gary\Google Drive\DBS ICT\Final Project\DroidSync\BlankCordovaApp1\bld\Debug\platforms\android\assets\www\scripts\q.min.js \
 C:\Users\Gary\Google Drive\DBS ICT\Final Project\DroidSync\BlankCordovaApp1\bld\Debug\platforms\android\assets\www\scripts\version.json \
 C:\Users\Gary\Google Drive\DBS ICT\Final Project\DroidSync\BlankCordovaApp1\bld\Debug\platforms\android\assets\www\scripts\i18n\angular-locale_aa-dj.js \
 C:\Users\Gary\Google Drive\DBS ICT\Final Project\DroidSync\BlankCordovaApp1\bld\Debug\platforms\android\assets\www\scripts\i18n\angular-locale_aa-er.js \
