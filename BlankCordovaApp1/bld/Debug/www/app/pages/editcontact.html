@@ -24,5 +24,5 @@
         <input type="email" name="email" placeholder="user@email.com" ng-model="contact.email" />
     </label>
     <button class="button button-block button-positive" type="submit" ng-click="editContact()">Choose Contact</button>
-    <button class="button button-block button-positive" type="submit" ng-click="saveContact()">Save Contact</button>
+    <button id="updateContact" class="button button-block button-positive" type="submit" ng-hide="!contact.firstName && !contact.lastName && !contact.mobileNo && !contact.homeNo && !contact.email" ng-click="saveContact()">Save Contact</button>
 </form>

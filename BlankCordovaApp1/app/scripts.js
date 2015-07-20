@@ -53,16 +53,17 @@ droidSync.config(function ($stateProvider, $urlRouterProvider) {
     })
 });
 
-droidSync.controller('mainController', function ($scope) {
+droidSync.controller('mainController', function ($scope, $ionicLoading) {
 
-    $scope.syncContacts = function () {
-
+    $scope.syncContacts = function (complete) {
+        //Display a loading screen while sync is in execution
+        $ionicLoading.show({
+            template: '<p>Syncing Contacts...</p><ion-spinner class="spinner-calm" icon="crescent"/>'
+        });
         var table = AzureService.getTable('contact');
         table.read().done(function (results) {
-
             results.forEach(function (result) {
                 console.log('result is', result);
-
                 // If the contact is flagged as deleted check if its on the device and delete it
                 if (result.isdeleted == true) {
                     var options = new ContactFindOptions();
@@ -115,15 +116,8 @@ droidSync.controller('mainController', function ($scope) {
                     function foundSuccess(contact) {
                         if (contact.length > 0) {
                             //The contact has been found on the device. Pass in ids for contact, emails and phone numbers to update.
-                            //console.log('Contact found its device id is', contact[0].id);
-                            //console.log('its phone number id for zero is', contact[0].phoneNumbers[0].id);
-                            //console.log('contactToUpdate = ', contactToUpdate);
-                            //console.log('contactToUpdate PhoneNumber zero = ', contactToUpdate.phoneNumbers[0].value);
-                            //console.log('contactToUpdate PhoneNumber id = ', contactToUpdate.phoneNumbers[0].id);
-                            //console.log('p1:p2:e1', contactToUpdate.phoneNumbers[0].id, contactToUpdate.phoneNumbers[1].id, contactToUpdate.emails[0].id);
                             console.log('object to update is object is', contact);
                             console.log('contact array length is ', contact.length);
-
 
                             contactToUpdate.id = contact[0].id;
                             contactToUpdate.rawId = contact[0].rawId;
@@ -165,7 +159,7 @@ droidSync.controller('managermenuController', function ($scope) {
 });
 
 droidSync.controller('settingsController', function ($scope) {
-
+    
 });
 
 droidSync.controller('managerController', function ($scope, $state) {

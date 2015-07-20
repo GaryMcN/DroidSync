@@ -53,16 +53,23 @@ droidSync.config(function ($stateProvider, $urlRouterProvider) {
     })
 });
 
-droidSync.controller('mainController', function ($scope) {
+droidSync.controller('mainController', function ($scope, $ionicLoading) {
 
-    $scope.syncContacts = function () {
-
+    $scope.syncContacts = function (complete) {
+        //Display a loading screen while sync is in execution
+        $ionicLoading.show({
+            template: '<p>Syncing Contacts...</p><ion-spinner class="spinner-calm" icon="crescent"/>'
+        });
         var table = AzureService.getTable('contact');
         table.read().done(function (results) {
-
+            var counter = 0;
+            if (counter == results.length){
+                console.log('counter is', counter);
+                $ionicLoading.hide()
+                alert('Sync Complete');
+            }
             results.forEach(function (result) {
                 console.log('result is', result);
-
                 // If the contact is flagged as deleted check if its on the device and delete it
                 if (result.isdeleted == true) {
                     var options = new ContactFindOptions();
@@ -80,9 +87,11 @@ droidSync.controller('mainController', function ($scope) {
                             console.log('we want to delete this', contactToDelete);
                             contactToDelete.remove();
                             console.log('Contact Deleted');
+                            counter++;
                         }
                         else {
                             console.log('Contact to delete not present on device. Checking next contact');
+                            counter++;
                         }
                     }
                     function findError() {
@@ -134,6 +143,7 @@ droidSync.controller('mainController', function ($scope) {
                             contactToUpdate.save(upSuccess, upError);
                             function upSuccess() {
                                 console.log('updated a contact!');
+                                counter++;
                             }
                             function upError(ContactError) {
                                 console.log('error updating a contact!');
@@ -145,6 +155,7 @@ droidSync.controller('mainController', function ($scope) {
                             contactToUpdate.save(saveSuccess, SaveError);
                             function saveSuccess() {
                                 console.log('saved a contact!');
+                                counter++;
                             }
                             function SaveError() {
                                 console.log('error saving a contact!');
@@ -165,7 +176,7 @@ droidSync.controller('managermenuController', function ($scope) {
 });
 
 droidSync.controller('settingsController', function ($scope) {
-
+    
 });
 
 droidSync.controller('managerController', function ($scope, $state) {

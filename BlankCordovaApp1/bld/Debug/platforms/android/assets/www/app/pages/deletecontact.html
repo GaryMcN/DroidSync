@@ -5,24 +5,24 @@
     </label>-->
     <label class="item item-input item-stacked-label">
         <span class="input-label">First Name</span>
-        <input type="text" name="firstName" placeholder="First Name" ng-model="contact.firstName" />
+        <input type="text" name="firstName" placeholder="First Name" ng-model="contact.firstName" disabled />
     </label>
     <label class="item item-input item-stacked-label">
         <span class="input-label">Last Name</span>
-        <input type="text" name="lastName" placeholder="Last Name" ng-model="contact.lastName" />
+        <input type="text" name="lastName" placeholder="Last Name" ng-model="contact.lastName" disabled />
     </label>
     <label class="item item-input item-stacked-label">
         <span class="input-label">Mobile</span>
-        <input type="text" name="mobileNo" placeholder="Mobile Number" ng-model="contact.mobileNo" />
+        <input type="text" name="mobileNo" placeholder="Mobile Number" ng-model="contact.mobileNo" disabled />
     </label>
     <label class="item item-input item-stacked-label">
         <span class="input-label">Home</span>
-        <input type="text" name="homeNo" placeholder="Home Number" ng-model="contact.homeNo" />
+        <input type="text" name="homeNo" placeholder="Home Number" ng-model="contact.homeNo" disabled />
     </label>
     <label class="item item-input item-stacked-label">
         <span class="input-label">Email</span>
-        <input type="email" name="email" placeholder="user@email.com" ng-model="contact.email" />
+        <input type="email" name="email" placeholder="user@email.com" ng-model="contact.email" disabled />
     </label>
     <button class="button button-block button-positive" type="submit" ng-click="editContact()">Choose Contact</button>
-    <button class="button button-block button-positive" type="submit" ng-click="deleteContact()">Delete Contact</button>
+    <button id="deleteContact" class="button button-block button-positive" type="submit" ng-hide="!contact.firstName && !contact.lastName && !contact.mobileNo && !contact.homeNo && !contact.email" ng-click="deleteContact()">Delete Contact</button>
 </form>
