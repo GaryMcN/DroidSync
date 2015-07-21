@@ -57,9 +57,9 @@ droidSync.controller('mainController', function ($scope, $ionicLoading) {
 
     $scope.syncContacts = function (complete) {
         //Display a loading screen while sync is in execution
-        $ionicLoading.show({
-            template: '<p>Syncing Contacts...</p><ion-spinner class="spinner-calm" icon="crescent"/>'
-        });
+        //$ionicLoading.show({
+        //    template: '<p>Syncing Contacts...</p><ion-spinner class="spinner-calm" icon="crescent"/>'
+        //});
         var table = AzureService.getTable('contact');
         table.read().done(function (results) {
             results.forEach(function (result) {
@@ -155,11 +155,11 @@ droidSync.controller('mainController', function ($scope, $ionicLoading) {
 });
 
 droidSync.controller('managermenuController', function ($scope) {
-
+    //Controller available for use in future work.
 });
 
 droidSync.controller('settingsController', function ($scope) {
-    
+    //Controller available for use in future work.
 });
 
 droidSync.controller('managerController', function ($scope, $state) {
@@ -218,6 +218,8 @@ droidSync.controller('managerController', function ($scope, $state) {
 
         // Get Table From Azure Mobile Services
         var table = AzureService.getTable('contact');
+
+        // Contact Object
         var contact = navigator.contacts.create();
 
         if (id !== null && id !== undefined) {
