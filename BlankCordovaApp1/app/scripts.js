@@ -56,10 +56,13 @@ droidSync.config(function ($stateProvider, $urlRouterProvider) {
 droidSync.controller('mainController', function ($scope, $ionicLoading) {
 
     $scope.syncContacts = function (complete) {
+
         //Display a loading screen while sync is in execution
-        //$ionicLoading.show({
-        //    template: '<p>Syncing Contacts...</p><ion-spinner class="spinner-calm" icon="crescent"/>'
-        //});
+        $ionicLoading.show({
+            template: '<p>Syncing Contacts...</p><ion-spinner class="spinner-calm" icon="crescent"/>',
+            duration: 5000
+        });
+
         var table = AzureService.getTable('contact');
         table.read().done(function (results) {
             results.forEach(function (result) {
@@ -162,7 +165,7 @@ droidSync.controller('settingsController', function ($scope) {
     //Controller available for use in future work.
 });
 
-droidSync.controller('managerController', function ($scope, $state) {
+droidSync.controller('managerController', function ($scope, $state, $ionicLoading) {
 
     //Initialize model
     $scope.contact = {};
@@ -196,6 +199,11 @@ droidSync.controller('managerController', function ($scope, $state) {
     };
 
     $scope.deleteContact = function () {
+
+        $ionicLoading.show({
+            template: '<p>Deleting...</p><ion-spinner class="spinner-calm" icon="crescent"/>',
+        });
+
         var table = AzureService.getTable('contact');
         var contact = navigator.contacts.create();
         contact.id = id;
@@ -204,10 +212,12 @@ droidSync.controller('managerController', function ($scope, $state) {
             contact.remove(delSuccess, delError);
 
             function delSuccess(delContact) {
+                $ionicLoading.hide();
                 alert("Contact Deleted");
                 $state.go('managermenu');
             }
             function delError(contactError) {
+                $ionicLoading.hide();
                 alert('Error Deleting');
                 $state.go('managermenu');
             }
@@ -215,6 +225,10 @@ droidSync.controller('managerController', function ($scope, $state) {
     };
 
     $scope.saveContact = function () {
+
+        $ionicLoading.show({
+            template: '<p>Saving...</p><ion-spinner class="spinner-calm" icon="crescent"/>',
+        });
 
         // Get Table From Azure Mobile Services
         var table = AzureService.getTable('contact');
@@ -277,10 +291,12 @@ droidSync.controller('managerController', function ($scope, $state) {
                 contact.save(saveSuccess, saveError);
 
                 function saveSuccess() {
+                    $ionicLoading.hide();
                     alert("Contact Saved");
                     $state.go('managermenu');
                 }
                 function saveError() {
+                    $ionicLoading.hide();
                     alert("Error Saving Contact");
                     $state.go('managermenu');
                 }
@@ -302,10 +318,12 @@ droidSync.controller('managerController', function ($scope, $state) {
                 contact.save(upSuccess, upError);
 
                 function upSuccess() {
+                    $ionicLoading.hide();
                     alert('Update Successful');
                     $state.go('managermenu');
                 }
                 function upError() {
+                    $ionicLoading.hide();
                     alert('Error Updating Contact');
                     $state.go('managermenu');
                 }
